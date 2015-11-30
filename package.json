@@ -19,5 +19,16 @@
   "bugs": {
     "url": "https://github.com/PhilVargas/minesweeper/issues"
   },
-  "homepage": "https://github.com/PhilVargas/minesweeper#readme"
+  "homepage": "https://github.com/PhilVargas/minesweeper#readme",
+  "devDependencies": {
+    "angular": "^1.4.8",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "del": "^2.1.0",
+    "gulp": "^3.9.0",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-sass": "^2.1.0",
+    "merge-stream": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
 }
