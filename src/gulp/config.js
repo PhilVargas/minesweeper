@@ -9,7 +9,7 @@ JS_BASE_DIR = 'src';
 STYLES_BASE_DIR = 'styles';
 JS_DEPLOY_DIR = 'dist/src';
 STYLES_DEPLOY_DIR = 'dist/styles';
-SASS_BASE_DIR = 'assets/styles/sass';
+SASS_BASE_DIR = 'styles/sass';
 VENDOR_ROOT = 'node_modules';
 
 function displayError(error){
