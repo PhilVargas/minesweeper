@@ -1,0 +1,23 @@
+{
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "description": "JavaScript Minesweeper game",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhilVargas/minesweeper.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "Minesweeper"
+  ],
+  "author": "Phil Vargas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhilVargas/minesweeper/issues"
+  },
+  "homepage": "https://github.com/PhilVargas/minesweeper#readme"
+}
