@@ -32,7 +32,7 @@ const browserifyOptions = {
 function buildJs(destination){
   return browserify(browserifyOptions)
     .transform(babelify, {
-      presets: ['es2015']
+      presets: ['es2015', 'react']
     })
     .bundle()
     .on('error', function(e){
