@@ -32,7 +32,8 @@ const browserifyOptions = {
 function buildJs(destination){
   return browserify(browserifyOptions)
     .transform(babelify, {
-      presets: ['es2015', 'react']
+      presets: ['es2015', 'react'],
+      plugins: ['transform-class-properties']
     })
     .bundle()
     .on('error', function(e){

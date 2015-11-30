@@ -22,6 +22,7 @@
   "homepage": "https://github.com/PhilVargas/minesweeper#readme",
   "devDependencies": {
     "babel-core": "^6.2.1",
+    "babel-plugin-transform-class-properties": "^6.2.2",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-react": "^6.1.18",
     "babelify": "^7.2.0",
