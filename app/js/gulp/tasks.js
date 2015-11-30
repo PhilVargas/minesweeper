@@ -6,13 +6,13 @@ const sass = require('gulp-sass');
 const browserify = require('browserify');
 const babelify = require('babelify');
 const source = require('vinyl-source-stream');
-const paths = require('./filepaths.js');
-const displayError = paths.displayError;
+const config = require('./config.js');
+const displayError = config.displayError;
 
 const browserifyOptions = {
-  entries: paths.entries,
-  basedir: paths.jsRoot,
-  paths: paths.includes,
+  entries: config.entries,
+  basedir: config.jsRoot,
+  paths: config.includes,
   extensions: ['.js'],
   debug: true,
   cache: {},
@@ -51,10 +51,10 @@ function buildJs(destination){
  * @return {void}
  */
 function watchJs(){
-  buildJs(paths.build);
+  buildJs(config.build);
   console.log(`[watcher] Bundle initialized at ${new Date()}`);
-  gulp.watch(paths.jsFiles, function(e){
-    buildJs(paths.build);
+  gulp.watch(config.jsFiles, function(e){
+    buildJs(config.build);
     console.log(`[watcher] File ${e.path.replace(/.*(?=js)/, '')} was ${e.type} at ${new Date()}, compiling...`);
   });
 }
@@ -82,10 +82,10 @@ function buildSass(destination, outputStyle){
  * @return {void}
  */
 function watchSass(){
-  buildSass(paths.stylesRoot, 'nested');
+  buildSass(config.stylesRoot, 'nested');
   console.log(`[watcher] Bundle initialized at ${new Date()}`);
-  gulp.watch(paths.sassFiles, function(e){
-    buildSass(paths.stylesRoot, 'nested');
+  gulp.watch(config.sassFiles, function(e){
+    buildSass(config.stylesRoot, 'nested');
     console.log(`[watcher] File ${e.path.replace(/.*(?=sass)/, '')} was ${e.type} at ${new Date()}, compiling...`);
   });
 }
@@ -115,8 +115,8 @@ function cleanScripts(){
  */
 function deployPrep(){
   return merge(
-    buildSass(paths.stylesDeployRoot, 'compressed'),
-    buildJs(paths.jsDeployRoot),
+    buildSass(config.stylesDeployRoot, 'compressed'),
+    buildJs(config.jsDeployRoot),
     gulp.src('README.md').pipe(gulp.dest('./dist/')),
     gulp.src('favicon.ico').pipe(gulp.dest('./dist/')),
     gulp.src('assets/**/*').pipe(gulp.dest('./dist/assets/')),
@@ -139,8 +139,8 @@ module.exports.watch = {
   sass: watchSass
 };
 module.exports.build = {
-  js: buildJs.bind(null, paths.build),
-  sass: buildSass.bind(null, paths.stylesRoot, 'compressed')
+  js: buildJs.bind(null, config.build),
+  sass: buildSass.bind(null, config.stylesRoot, 'compressed')
 };
 module.exports.deploy = {
   clean: cleanScripts,

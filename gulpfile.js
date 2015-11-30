@@ -4,7 +4,7 @@ require('babel-core/register');
 let gulp, gulpTasks;
 
 gulp = require('gulp');
-gulpTasks = require('./public/js/gulp/tasks');
+gulpTasks = require('./app/js/gulp/tasks.js');
 
 gulp.task('js:build', gulpTasks.build.js);
 gulp.task('js:watch', gulpTasks.watch.js);

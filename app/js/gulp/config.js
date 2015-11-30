@@ -22,9 +22,10 @@ function displayError(error){
 module.exports = {
   build: JS_BASE_DIR,
   displayError,
-  entries: [''],
+  entries: ['index.js'],
   includes: [
-    './'
+    './',
+    './app/**'
   ],
   stylesRoot: STYLES_BASE_DIR,
   sassRoot: SASS_BASE_DIR,
