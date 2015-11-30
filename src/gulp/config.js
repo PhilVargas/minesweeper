@@ -5,11 +5,11 @@ let JS_BASE_DIR,
     SASS_BASE_DIR,
     VENDOR_ROOT;
 
-JS_BASE_DIR = 'app/js';
-STYLES_BASE_DIR = 'assets/css';
-JS_DEPLOY_DIR = 'dist/app/js';
-STYLES_DEPLOY_DIR = 'dist/assets/css';
-SASS_BASE_DIR = 'assets/css/sass';
+JS_BASE_DIR = 'src';
+STYLES_BASE_DIR = 'styles';
+JS_DEPLOY_DIR = 'dist/src';
+STYLES_DEPLOY_DIR = 'dist/styles';
+SASS_BASE_DIR = 'assets/styles/sass';
 VENDOR_ROOT = 'node_modules';
 
 function displayError(error){
