@@ -1,0 +1,18 @@
+.tile {
+  position: relative;
+  border: 1px solid #504d49;
+  width: 30px;
+  height: 30px;
+  float: left;
+  color: #100d09;
+  font-weight: bold;
+  line-height: 30px;
+  font-size: 20px;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    background-color: grey;
+  }
+}
+
