@@ -121,7 +121,7 @@ function deployPrep(){
     gulp.src('README.md').pipe(gulp.dest('./dist/')),
     gulp.src('favicon.ico').pipe(gulp.dest('./dist/')),
     gulp.src('assets/**/*').pipe(gulp.dest('./dist/assets/')),
-    gulp.src('views/index.html').pipe(gulp.dest('./dist/index.html'))
+    gulp.src('index.html').pipe(gulp.dest('./dist/'))
   );
 }
 

@@ -8,7 +8,7 @@ class Game extends React.Component {
 
   static propTypes = {
     columns: React.PropTypes.number.isRequired,
-    game: React.PropTypes.node.isRequired,
+    game: React.PropTypes.any.isRequired,
     rows: React.PropTypes.number.isRequired
   }
 
