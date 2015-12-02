@@ -3,6 +3,9 @@ const { fromJS } = require('immutable');
 
 const Tile = require('components/tile');
 
+const Action = require('actions/game');
+const Store = require('stores/game');
+
 class Game extends React.Component {
   static displayName = 'game'
 
@@ -14,6 +17,22 @@ class Game extends React.Component {
 
   constructor(props){
     super(props);
+
+    this.state = {
+      game: props.game
+    };
+  }
+
+  componentDidMount(){
+    Store.bindChange(this.gameChanged.bind(this));
+  }
+
+  gameChanged(){
+    this.setState({ game: Store.game });
+  }
+
+  componentWillUnount(){
+    Store.unbindChange(this.gameChanged.bind(this));
   }
 
   generateRows(){
@@ -33,9 +52,9 @@ class Game extends React.Component {
 
   generateColumns(row){
     return (
-      fromJS(this.props.game.slice(row * this.props.columns, (row + 1) * this.props.columns))
+      fromJS(this.state.game.slice(row * this.props.columns, (row + 1) * this.props.columns))
       .map(function(tile){
-        return <Tile {...tile.toObject()} mineCount={ 0 } key={ tile.get('id') } />;
+        return <Tile {...tile.toObject()} key={ tile.get('id') } revealTile={ Action.revealTile }/>;
       })
     );
   }
