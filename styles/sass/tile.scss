@@ -11,8 +11,21 @@
   vertical-align: middle;
   text-align: center;
   cursor: pointer;
+  background-image: radial-gradient(
+    circle at top left,
+    #a49e96,
+    #605d59
+  );
   &:hover {
-    background-color: grey;
+    background-image: radial-gradient(
+      circle at bottom right,
+      #a49e96,
+      #605d59
+    );
+  }
+  &.revealed {
+    background-color: #a49e96;
+    background-image: none;
   }
 }
 
