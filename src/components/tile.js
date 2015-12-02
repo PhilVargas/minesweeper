@@ -8,7 +8,8 @@ class Tile extends React.Component {
     id: React.PropTypes.number.isRequired,
     isMine: React.PropTypes.bool.isRequired,
     isRevealed: React.PropTypes.bool.isRequired,
-    mineCount: React.PropTypes.number.isRequired
+    mineCount: React.PropTypes.number.isRequired,
+    revealTile: React.PropTypes.func.isRequired
   }
 
   constructor(props){
@@ -22,8 +23,18 @@ class Tile extends React.Component {
     });
   }
 
+  mineCount(){
+    return cx({
+      [this.props.mineCount]: this.props.isRevealed && !this.props.isMine && this.props.mineCount > 0
+    });
+  }
+
   render(){
-    return <div className={ this.containerClass() }>{ this.props.mineCount || null }</div>;
+    return <div className={ this.containerClass() } onClick={ this.handleClick.bind(this) }>{ this.mineCount() }</div>;
+  }
+
+  handleClick(){
+    this.props.revealTile(this.props.id);
   }
 }
 
