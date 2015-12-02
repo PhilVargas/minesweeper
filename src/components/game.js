@@ -6,6 +6,12 @@ const Tile = require('components/tile');
 class Game extends React.Component {
   static displayName = 'game'
 
+  static propTypes = {
+    columns: React.PropTypes.number.isRequired,
+    game: React.PropTypes.node.isRequired,
+    rows: React.PropTypes.number.isRequired
+  }
+
   constructor(props){
     super(props);
   }
