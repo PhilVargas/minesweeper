@@ -100,6 +100,21 @@ class Store {
     }).length;
   }
 
+  static revealTiles(game, tileId){
+    if (game.getIn([tileId, 'isMine'])) {
+      return game;
+    }
+
+    game = game.setIn([tileId, 'isRevealed'], true);
+    game = game.setIn([tileId, 'mineCount'], this.getMineCount(game, tileId));
+    if (game.getIn([tileId, 'mineCount']) === 0) {
+      return this.neighbours(game, tileId).reduce((game, neighbour) => {
+        return !game.getIn([neighbour.get('id'), 'isRevealed']) ? this.revealTiles(game, neighbour.get('id')) : game;
+      }, game, this);
+    }
+    return game;
+  }
+
   static initializeTiles(rows, columns, mineCount){
     let mines, safeTiles, tiles;
 
@@ -141,8 +156,7 @@ Dispatcher.register(function(payload){
       Store.triggerChange();
       break;
     case 'game:revealTile':
-      store = store.setIn(['game', payload.value, 'isRevealed'], true);
-      store = store.setIn(['game', payload.value, 'mineCount'], Store.getMineCount(store.get('game'), payload.value));
+      store = store.set('game', Store.revealTiles(store.get('game'), payload.value));
       Store.triggerChange();
       break;
   }
