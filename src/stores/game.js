@@ -3,50 +3,113 @@ const MicroEvent = require('microevent-github');
 const { Map, List } = require('immutable');
 
 const Settings = require('helpers/settings');
+const emmitter = new MicroEvent();
 
-const directions = [nw, n, ne, e, se, s, sw, w];
 let store;
 
 class Store {
-  constructor(opts = {}){
-    this.columns = opts.columns || Settings.columns;
-    this.rows = opts.rows || Settings.rows;
-    this.mines = opts.mines || Settings.mines;
-    this.game = null;
-    this.initializeTiles();
+  static get(attr){
+    return store.get(attr);
   }
 
-  getAll(){
+  static getAll(){
     return {
-      columns: this.columns,
-      rows: this.rows,
-      mines: this.mines,
-      game: this.game
+      columns: store.get('columns'),
+      rows: store.get('rows'),
+      mines: store.get('mines'),
+      game: store.get('game')
     };
   }
 
-  triggerChange(){
-    this.trigger('change');
+  static triggerChange(){
+    emmitter.trigger('change');
   }
 
-  unbindChange(cb){
-    this.unbind('change', cb);
+  static unbindChange(cb){
+    emmitter.unbind('change', cb);
   }
 
-  bindChange(cb){
-    this.bind('change', cb);
+  static bindChange(cb){
+    emmitter.bind('change', cb);
   }
 
-  initializeTiles(){
+  static onWEdge(game, tile){
+    return tile % store.get('columns') === 0;
+  }
+
+  static onEEdge(game, tile){
+    return tile % store.get('columns') === store.get('columns') - 1;
+  }
+
+  static idx(game, tile){
+    if (tile < 0) { return null; }
+    return game.getIn([tile]) ? tile : null;
+  }
+
+  static nw(game, tile){
+    return this.onWEdge(game, tile) ? null : this.idx(game, tile - store.get('columns') - 1);
+  }
+
+  static n(game, tile){
+    return this.idx(game, tile - store.get('columns'));
+  }
+
+  static ne(game, tile){
+    return this.onEEdge(game, tile) ? null : this.idx(game, tile - store.get('columns') + 1);
+  }
+
+  static e(game, tile){
+    return this.onEEdge(game, tile) ? null : this.idx(game, tile + 1);
+  }
+
+  static se(game, tile){
+    return this.onEEdge(game, tile) ? null : this.idx(game, tile + store.get('columns') + 1);
+  }
+
+  static s(game, tile){
+    return this.idx(game, tile + store.get('columns'));
+  }
+
+  static sw(game, tile){
+    return this.onWEdge(game, tile) ? null : this.idx(game, tile + store.get('columns') - 1);
+  }
+
+  static w(game, tile){
+    return this.onWEdge(game, tile) ? null : this.idx(game, tile - 1);
+  }
+
+  static keep(list, pred){
+    return list.map(pred).filter(this.identity);
+  }
+
+  static identity(v){
+    return v;
+  }
+
+  static neighbours(game, tile){
+    const directions = [this.nw.bind(this), this.n, this.ne, this.e, this.se, this.s, this.sw, this.w];
+
+    return this.keep(directions, (dir) => {
+      return game.get(dir.call(this, game, tile));
+    });
+  }
+
+  static getMineCount(game, tileId){
+    return this.neighbours(game, tileId).filter(function(tile){
+      return game.getIn([tile.get('id'), 'isMine']);
+    }).length;
+  }
+
+  static initializeTiles(rows, columns, mineCount){
     let mines, safeTiles, tiles;
 
     mines = [];
     safeTiles = [];
 
-    for (let i = 0; i < this.mines; i++) {
+    for (let i = 0; i < mineCount; i++) {
       mines.push({ isMine: true, isRevealed: false });
     }
-    for (let i = 0; i < ((this.rows * this.columns) - this.mines); i++) {
+    for (let i = 0; i < ((rows * columns) - mineCount); i++) {
       safeTiles.push({ isMine: false, isRevealed: false });
     }
     tiles = mines.concat(safeTiles)
@@ -57,87 +120,32 @@ class Store {
         el.id = index;
         return Map(el);
       });
-    this.game = List(tiles).map(function(tile,id,list){
-      return tile.set('mineCount', getMineCount(list,id))
+    return List(tiles).map((tile, id, list) => {
+      return tile.set('mineCount', this.getMineCount(list, id));
     });
   }
-}
-
-MicroEvent.mixin(Store);
-store = new Store();
-
-function onWEdge(game, tile) {
-  return tile % Settings.columns === 0;
-}
-
-function onEEdge(game, tile) {
-  return tile % Settings.columns === Settings.columns - 1;
-}
-
-function idx(game, tile) {
-  if (tile < 0) { return null; }
-  return game.getIn([tile]) ? tile : null;
-}
-
-function nw(game, tile) {
-  return onWEdge(game, tile) ? null : idx(game, tile - Settings.columns - 1);
-}
-
-function n(game, tile) {
-  return idx(game, tile - Settings.columns);
-}
-
-function ne(game, tile) {
-  return onEEdge(game, tile) ? null : idx(game, tile - Settings.columns + 1);
-}
-
-function e(game, tile) {
-  return onEEdge(game, tile) ? null : idx(game, tile + 1);
-}
-
-function se(game, tile) {
-  return onEEdge(game, tile) ? null : idx(game, tile + Settings.columns + 1);
-}
-
-function s(game, tile) {
-  return idx(game, tile + Settings.columns);
-}
-
-function sw(game, tile) {
-  return onWEdge(game, tile) ? null : idx(game, tile + Settings.columns - 1);
-}
-
-function w(game, tile) {
-  return onWEdge(game, tile) ? null : idx(game, tile - 1);
-}
-
-function keep(list, pred) {
-  return list.map(pred).filter(identity);
-}
-function identity(v) {
-  return v;
-}
-
-function neighbours(game, tile) {
-  return keep(directions, function (dir) {
-    return game.get(dir(game, tile));
-  });
-}
-
-function getMineCount(game, tileId) {
-  var nbs = neighbours(game, tileId);
-  return nbs.filter(function(tile){ return game.getIn([tile.get('id'), 'isMine']) }).length;
 }
 
 
 Dispatcher.register(function(payload){
   switch (payload.eventName) {
+    case 'game:init':
+      const { columns, rows, mines } = Object.assign(Settings, payload.value);
+
+      store = Map({
+        columns,
+        rows,
+        mines
+      });
+      store = store.set('game', Store.initializeTiles(rows, columns, mines));
+      Store.triggerChange();
+      break;
     case 'game:revealTile':
-      store.game = store.game.setIn([payload.value, 'isRevealed'], true);
-      store.game = store.game.setIn([payload.value, 'mineCount'], getMineCount(store.game, payload.value));
-      store.triggerChange();
+      store = store.setIn(['game', payload.value, 'isRevealed'], true);
+      store = store.setIn(['game', payload.value, 'mineCount'], Store.getMineCount(store.get('game'), payload.value));
+      Store.triggerChange();
       break;
   }
 });
 
-module.exports = store;
+module.exports = Store;

@@ -28,7 +28,7 @@ class Game extends React.Component {
   }
 
   gameChanged(){
-    this.setState({ game: Store.game });
+    this.setState({ game: Store.get('game') });
   }
 
   componentWillUnount(){
