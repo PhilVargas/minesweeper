@@ -108,8 +108,8 @@ class Store {
     game = game.setIn([tileId, 'isRevealed'], true);
     game = game.setIn([tileId, 'mineCount'], this.getMineCount(game, tileId));
     if (game.getIn([tileId, 'mineCount']) === 0) {
-      return this.neighbours(game, tileId).reduce((game, neighbour) => {
-        return !game.getIn([neighbour.get('id'), 'isRevealed']) ? this.revealTiles(game, neighbour.get('id')) : game;
+      return this.neighbours(game, tileId).reduce((newGame, neighbour) => {
+        return !newGame.getIn([neighbour.get('id'), 'isRevealed']) ? this.revealTiles(newGame, neighbour.get('id')) : newGame;
       }, game, this);
     }
     return game;
@@ -140,7 +140,6 @@ class Store {
     });
   }
 }
-
 
 Dispatcher.register(function(payload){
   switch (payload.eventName) {
