@@ -147,7 +147,7 @@
     "lines-around-comment": 0,
     "linebreak-style": 0,
     "max-nested-callbacks": 0,
-    "new-cap": 1,
+    "new-cap": [1, { "capIsNewExceptions": ["List", "Map"] }],
     "new-parens": 1,
     "newline-after-var": 1,
     "no-array-constructor": 1,
