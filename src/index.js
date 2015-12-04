@@ -3,7 +3,8 @@ const ReactDOM = require('react-dom');
 const React = require('react');
 const Game = require('components/game');
 const Store = require('stores/game');
-const Action = require('actions/game');
+
+import Action from 'actions/game';
 
 Action.init();
 $(document).on('ready', function(){

@@ -3,7 +3,7 @@ const { fromJS } = require('immutable');
 
 const Tile = require('components/tile');
 
-const Action = require('actions/game');
+import Action from 'actions/game';
 const Store = require('stores/game');
 
 class Game extends React.Component {

@@ -1,4 +1,4 @@
-const Dispatcher = require('dispatcher');
+import Dispatcher from 'dispatcher';
 
 class Action {
   static init(opts = {}){
@@ -16,4 +16,4 @@ class Action {
   }
 }
 
-module.exports = Action;
+export { Action as default };
