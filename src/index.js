@@ -2,8 +2,8 @@ const $ = require('jquery');
 const ReactDOM = require('react-dom');
 const React = require('react');
 const Game = require('components/game');
-const Store = require('stores/game');
 
+import Store from 'stores/game';
 import Action from 'actions/game';
 
 Action.init();

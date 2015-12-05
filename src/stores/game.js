@@ -1,8 +1,9 @@
-const Dispatcher = require('dispatcher');
-const MicroEvent = require('microevent-github');
-const { Map, List } = require('immutable');
+import Dispatcher from 'dispatcher';
+import MicroEvent from 'microevent-github';
+import { Map, List } from 'immutable';
 
-const Settings = require('helpers/settings');
+import Settings from 'helpers/settings';
+
 const emmitter = new MicroEvent();
 
 let store;
@@ -161,4 +162,4 @@ Dispatcher.register(function(payload){
   }
 });
 
-module.exports = Store;
+export { Store as default };
