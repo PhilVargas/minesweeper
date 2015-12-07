@@ -1,13 +1,12 @@
-const gulp = require('gulp');
-const clean = require('del');
-const merge = require('merge-stream');
-const ghPages = require('gulp-gh-pages');
-const sass = require('gulp-sass');
-const browserify = require('browserify');
-const babelify = require('babelify');
-const source = require('vinyl-source-stream');
-const config = require('./config.js');
-const displayError = config.displayError;
+import gulp from 'gulp';
+import clean from 'del';
+import merge from 'merge-stream';
+import ghPages from 'gulp-gh-pages';
+import sass from 'gulp-sass';
+import browserify from 'browserify';
+import babelify from 'babelify';
+import source from 'vinyl-source-stream';
+import { default as config, displayError } from './config';
 
 const browserifyOptions = {
   entries: config.entries,
@@ -135,15 +134,15 @@ function deployProd(){
   return gulp.src('./dist/**/*').pipe(ghPages({ force: true }));
 }
 
-module.exports.watch = {
+export const watch = {
   js: watchJs,
   sass: watchSass
 };
-module.exports.build = {
+export const build = {
   js: buildJs.bind(null, config.build),
   sass: buildSass.bind(null, config.stylesRoot, 'compressed')
 };
-module.exports.deploy = {
+export const deploy = {
   clean: cleanScripts,
   prep: deployPrep,
   prod: deployProd
