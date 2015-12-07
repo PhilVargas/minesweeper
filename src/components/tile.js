@@ -1,5 +1,5 @@
-const React = require('react');
-const cx = require('classnames');
+import React from 'react';
+import cx from 'classnames';
 
 class Tile extends React.Component {
   static displayName = 'Tile'
@@ -38,5 +38,4 @@ class Tile extends React.Component {
   }
 }
 
-module.exports = Tile;
-
+export { Tile as default };

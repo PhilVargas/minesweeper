@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ReactDOM = require('react-dom');
-const React = require('react');
-const Game = require('components/game');
+import $ from 'jquery';
+import ReactDOM from 'react-dom';
+import React from 'react';
 
+import Game from 'components/game';
 import Store from 'stores/game';
 import Action from 'actions/game';
 

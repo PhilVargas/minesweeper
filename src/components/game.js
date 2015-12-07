@@ -1,7 +1,7 @@
-const React = require('react');
-const { fromJS } = require('immutable');
+import React from 'react';
+import { fromJS } from 'immutable';
 
-const Tile = require('components/tile');
+import { default as Tile } from 'components/tile';
 
 import Action from 'actions/game';
 import Store from 'stores/game';
@@ -68,4 +68,4 @@ class Game extends React.Component {
   }
 }
 
-module.exports = Game;
+export { Game as default };
