@@ -1,7 +1,10 @@
-const React = require('react');
-const { fromJS } = require('immutable');
+import React from 'react';
+import { fromJS } from 'immutable';
 
-const Tile = require('components/tile');
+import { default as Tile } from 'components/tile';
+
+import Action from 'actions/game';
+import Store from 'stores/game';
 
 class Game extends React.Component {
   static displayName = 'game'
@@ -14,6 +17,22 @@ class Game extends React.Component {
 
   constructor(props){
     super(props);
+
+    this.state = {
+      game: props.game
+    };
+  }
+
+  componentDidMount(){
+    Store.bindChange(this.gameChanged.bind(this));
+  }
+
+  gameChanged(){
+    this.setState({ game: Store.get('game') });
+  }
+
+  componentWillUnount(){
+    Store.unbindChange(this.gameChanged.bind(this));
   }
 
   generateRows(){
@@ -33,9 +52,9 @@ class Game extends React.Component {
 
   generateColumns(row){
     return (
-      fromJS(this.props.game.slice(row * this.props.columns, (row + 1) * this.props.columns))
+      fromJS(this.state.game.slice(row * this.props.columns, (row + 1) * this.props.columns))
       .map(function(tile){
-        return <Tile {...tile.toObject()} mineCount={ 0 } key={ tile.get('id') } />;
+        return <Tile {...tile.toObject()} key={ tile.get('id') } revealTile={ Action.revealTile }/>;
       })
     );
   }
@@ -49,4 +68,4 @@ class Game extends React.Component {
   }
 }
 
-module.exports = Game;
+export { Game as default };
