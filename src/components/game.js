@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import { default as Tile } from 'components/tile';
 
 import Action from 'actions/game';
-// import Store from 'stores/game';
 
 class Game extends React.Component {
   static displayName = 'game'
 
   static propTypes = {
     columns: React.PropTypes.number.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
     game: React.PropTypes.any.isRequired,
     rows: React.PropTypes.number.isRequired
   }

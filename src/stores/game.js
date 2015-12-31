@@ -4,7 +4,7 @@ import { createStore } from 'redux';
 
 import Settings from 'helpers/settings';
 
-class Store {
+class StoreData {
   static onWEdge(game, tile, columns){
     return tile % columns === 0;
   }
@@ -115,25 +115,21 @@ class Store {
 function initialState(){
   const { columns, rows, mines } = Settings;
 
-  let store;
-
-  store = Map({
-    columns,
-    rows,
-    mines
-  });
-  return store.set('game', Store.initializeTiles(rows, columns, mines));
+  return (
+    Map({ columns, rows, mines })
+    .set('game', StoreData.initializeTiles(rows, columns, mines))
+  );
 }
 
-function reduxStore(state, payload){
+function register(state, payload){
   switch (payload.type) {
     case INIT:
       return initialState();
     case REVEAL_TILE:
-      return state.set('game', Store.revealTiles(state.get('game'), payload.value, state.get('columns')));
+      return state.set('game', StoreData.revealTiles(state.get('game'), payload.value, state.get('columns')));
   }
 }
 
-export const redStore = createStore(reduxStore);
+const Store = createStore(register);
 
 export { Store as default };
