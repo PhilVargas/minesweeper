@@ -89,18 +89,14 @@ class StoreData {
   }
 
   static initializeTiles(rows, columns, mineCount){
-    let mines, safeTiles, tiles;
+    let tiles;
 
-    mines = [];
-    safeTiles = [];
+    tiles = [];
 
-    for (let i = 0; i < mineCount; i++) {
-      mines.push({ isMine: true, isRevealed: false });
+    for (let i = 0; i < (rows * columns); i++) {
+      tiles.push({ isMine: (i < mineCount), isRevealed: false });
     }
-    for (let i = 0; i < ((rows * columns) - mineCount); i++) {
-      safeTiles.push({ isMine: false, isRevealed: false });
-    }
-    tiles = AppHelper.shuffle(mines.concat(safeTiles))
+    tiles = AppHelper.shuffle(tiles)
       .map(function(el, index){
         el.id = index;
         return Map(el);
