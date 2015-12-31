@@ -7,20 +7,20 @@ import { default as Tile } from 'components/tile';
 import Action from 'actions/game';
 
 class Game extends React.Component {
-  static displayName = 'game'
+  static displayName = 'Game'
 
   static propTypes = {
     columns: React.PropTypes.number.isRequired,
     dispatch: React.PropTypes.func.isRequired,
-    game: React.PropTypes.any.isRequired,
-    rows: React.PropTypes.number.isRequired
+    rows: React.PropTypes.number.isRequired,
+    tiles: React.PropTypes.any.isRequired
   }
 
   constructor(props){
     super(props);
 
     this.state = {
-      game: props.game
+      tiles: props.tiles
     };
   }
 
@@ -45,7 +45,7 @@ class Game extends React.Component {
 
   generateColumns(row){
     return (
-      fromJS(this.props.game.slice(row * this.props.columns, (row + 1) * this.props.columns))
+      fromJS(this.props.tiles.slice(row * this.props.columns, (row + 1) * this.props.columns))
       .map((tile) => {
         return <Tile {...tile.toObject()} key={ tile.get('id') } revealTile={ this.revealTile.bind(this, tile.get('id')) }/>;
       })
@@ -65,7 +65,7 @@ function select(state){
   return {
     columns: state.get('columns'),
     rows: state.get('rows'),
-    game: state.get('game')
+    tiles: state.get('tiles')
   }
 }
 export default connect(select)(Game);
