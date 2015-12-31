@@ -1,16 +1,17 @@
 import React from 'react';
 import { fromJS } from 'immutable';
+import { connect } from 'react-redux';
 
 import { default as Tile } from 'components/tile';
 
 import Action from 'actions/game';
-import Store from 'stores/game';
 
 class Game extends React.Component {
   static displayName = 'game'
 
   static propTypes = {
     columns: React.PropTypes.number.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
     game: React.PropTypes.any.isRequired,
     rows: React.PropTypes.number.isRequired
   }
@@ -21,18 +22,6 @@ class Game extends React.Component {
     this.state = {
       game: props.game
     };
-  }
-
-  componentDidMount(){
-    Store.bindChange(this.gameChanged.bind(this));
-  }
-
-  gameChanged(){
-    this.setState({ game: Store.get('game') });
-  }
-
-  componentWillUnount(){
-    Store.unbindChange(this.gameChanged.bind(this));
   }
 
   generateRows(){
@@ -50,11 +39,15 @@ class Game extends React.Component {
     return rows;
   }
 
+  revealTile(id){
+    this.props.dispatch(Action.revealTile(id));
+  }
+
   generateColumns(row){
     return (
-      fromJS(this.state.game.slice(row * this.props.columns, (row + 1) * this.props.columns))
-      .map(function(tile){
-        return <Tile {...tile.toObject()} key={ tile.get('id') } revealTile={ Action.revealTile }/>;
+      fromJS(this.props.game.slice(row * this.props.columns, (row + 1) * this.props.columns))
+      .map((tile) => {
+        return <Tile {...tile.toObject()} key={ tile.get('id') } revealTile={ this.revealTile.bind(this, tile.get('id')) }/>;
       })
     );
   }
@@ -68,4 +61,11 @@ class Game extends React.Component {
   }
 }
 
-export { Game as default };
+function select(state){
+  return {
+    columns: state.get('columns'),
+    rows: state.get('rows'),
+    game: state.get('game')
+  }
+}
+export default connect(select)(Game);
