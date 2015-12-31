@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 
 import Game from 'components/game';
 import { redStore } from 'stores/game';
-import { init } from 'actions/game';
+import Action from 'actions/game';
 
-redStore.dispatch(init());
+redStore.dispatch(Action.init());
 
 $(document).on('ready', function(){
   ReactDOM.render(

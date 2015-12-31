@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { default as Tile } from 'components/tile';
 
-import Action, { revealTile } from 'actions/game';
-import Store from 'stores/game';
+import Action from 'actions/game';
+// import Store from 'stores/game';
 
 class Game extends React.Component {
   static displayName = 'game'
@@ -40,7 +40,7 @@ class Game extends React.Component {
   }
 
   revealTile(id){
-    this.props.dispatch(revealTile(id));
+    this.props.dispatch(Action.revealTile(id));
   }
 
   generateColumns(row){

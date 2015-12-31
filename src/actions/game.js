@@ -1,40 +1,25 @@
-import Dispatcher from 'dispatcher';
+export const INIT = 'INIT';
+export const REVEAL_TILE = 'REVEAL_TILE';
+export const Constants = {
+  INIT,
+  REVEAL_TILE
+};
 
 class Action {
   static init(opts = {}){
-    Dispatcher.dispatch({
-      eventName: 'game:init',
+    return {
+      type: INIT,
       value: opts
-    });
+    };
   }
 
   static revealTile(id){
-    Dispatcher.dispatch({
-      eventName: 'game:revealTile',
+    return {
+      type: REVEAL_TILE,
       value: id
-    });
+    };
   }
 }
 
 export { Action as default };
 
-export const INIT = 'INIT';
-export const REVEAL_TILE = 'REVEAL_TILE';
-export const Actions = {
-  INIT,
-  REVEAL_TILE
-};
-
-export function init(opts = {}){
-  return {
-    type: INIT,
-    value: opts
-  };
-}
-
-export function revealTile(id){
-  return {
-    type: REVEAL_TILE,
-    value: id
-  };
-}
