@@ -3,6 +3,7 @@ import { INIT, REVEAL_TILE } from 'actions/game';
 import { createStore } from 'redux';
 
 import Settings from 'helpers/settings';
+import AppHelper from 'helpers/app-helper';
 
 class StoreData {
   static onWEdge(game, tile, columns){
@@ -99,10 +100,7 @@ class StoreData {
     for (let i = 0; i < ((rows * columns) - mineCount); i++) {
       safeTiles.push({ isMine: false, isRevealed: false });
     }
-    tiles = mines.concat(safeTiles)
-      .sort(function(){
-        return Math.random() - 0.5;
-      })
+    tiles = AppHelper.shuffle(mines.concat(safeTiles))
       .map(function(el, index){
         el.id = index;
         return Map(el);
