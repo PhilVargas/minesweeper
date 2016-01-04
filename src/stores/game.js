@@ -1,5 +1,5 @@
 import { Map, List } from 'immutable';
-import { INIT, REVEAL_TILE } from 'actions/game';
+import { INIT, REVEAL_TILE, SET_TILE_STATUS } from 'actions/game';
 import { createStore } from 'redux';
 
 import Settings from 'helpers/settings';
@@ -78,11 +78,11 @@ class StoreData {
       return tiles;
     }
 
-    tiles = tiles.setIn([tileId, 'isRevealed'], true);
+    tiles = tiles.setIn([tileId, 'tileStatus'], 'revealed');
     tiles = tiles.setIn([tileId, 'mineCount'], this.getMineCount(tiles, tileId, columns));
     if (tiles.getIn([tileId, 'mineCount']) === 0) {
       return this.neighbours(tiles, tileId, columns).reduce((newGame, neighbour) => {
-        return !newGame.getIn([neighbour.get('id'), 'isRevealed']) ? this.revealTiles(newGame, neighbour.get('id'), columns) : newGame;
+        return newGame.getIn([neighbour.get('id'), 'tileStatus']) !== 'revealed' ? this.revealTiles(newGame, neighbour.get('id'), columns) : newGame;
       }, tiles, this);
     }
     return tiles;
@@ -94,7 +94,7 @@ class StoreData {
     tiles = [];
 
     for (let i = 0; i < (rows * columns); i++) {
-      tiles.push({ isMine: (i < mineCount), isRevealed: false });
+      tiles.push({ isMine: (i < mineCount), tileStatus: 'initial' });
     }
     tiles = AppHelper.shuffle(tiles)
       .map(function(el, index){
@@ -110,7 +110,7 @@ function initialState(){
   const { columns, rows, mines } = Settings;
 
   return (
-    Map({ columns, rows, mines })
+    Map({ columns, isGameOver: false, rows, mines })
     .set('tiles', StoreData.initializeTiles(rows, columns, mines))
   );
 }
@@ -120,7 +120,38 @@ function register(state, payload){
     case INIT:
       return initialState();
     case REVEAL_TILE:
-      return state.set('tiles', StoreData.revealTiles(state.get('tiles'), payload.value, state.get('columns')));
+      if (state.get('isGameOver')) { return state; }
+      if (state.getIn(['tiles', payload.value, 'isMine'])) {
+        let revealedTiles;
+
+        revealedTiles = state.get('tiles').map(tile => {
+          if (tile.get('isMine')) {
+            tile = tile.set('tileStatus', 'revealed');
+          }
+          return tile;
+        });
+
+        return state.merge({ isGameOver: true, tiles: revealedTiles });
+      } else {
+        return state.set('tiles', StoreData.revealTiles(state.get('tiles'), payload.value, state.get('columns')));
+      }
+    case SET_TILE_STATUS:
+      if (state.get('isGameOver')) { return state; }
+      switch (payload.value.tileStatus) {
+        case 'revealed':
+          return state;
+        case 'initial':
+          return state.setIn(['tiles', payload.value.id, 'tileStatus'], 'flag');
+        case 'flag':
+          return state.setIn(['tiles', payload.value.id, 'tileStatus'], 'possibleMine');
+        case 'possibleMine':
+          return state.setIn(['tiles', payload.value.id, 'tileStatus'], 'initial');
+        default:
+          console.error(`There was an error setting the tile status. Invalid value of ${payload.value.tileStatus}`);
+          return state;
+      }
+    default:
+      return state;
   }
 }
 
