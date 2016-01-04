@@ -89,6 +89,7 @@ function select(state){
   return {
     columns: state.get('columns'),
     isGameOver: state.get('isGameOver'),
+    isPlayerVictory: state.get('isPlayerVictory'),
     mines: state.get('mines'),
     rows: state.get('rows'),
     tiles: state.get('tiles')

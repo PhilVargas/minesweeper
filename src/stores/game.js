@@ -105,12 +105,18 @@ class StoreData {
       return tile.set('mineCount', this.getMineCount(list, id));
     });
   }
+
+  static isPlayerVictory(game){
+    return game.get('tiles').every((tile) => {
+      return !tile.get('isMine') || tile.get('tileStatus') === 'flag';
+    });
+  }
 }
 function initialState(){
   const { columns, rows, mines } = Settings;
 
   return (
-    Map({ columns, isGameOver: false, rows, mines })
+    Map({ columns, isGameOver: false, isPlayerVictory: false, rows, mines })
     .set('tiles', StoreData.initializeTiles(rows, columns, mines))
   );
 }
@@ -141,7 +147,8 @@ function register(state, payload){
         case 'revealed':
           return state;
         case 'initial':
-          return state.setIn(['tiles', payload.value.id, 'tileStatus'], 'flag');
+          state = state.setIn(['tiles', payload.value.id, 'tileStatus'], 'flag');
+          return state.set('isPlayerVictory', StoreData.isPlayerVictory(state));
         case 'flag':
           return state.setIn(['tiles', payload.value.id, 'tileStatus'], 'possibleMine');
         case 'possibleMine':
