@@ -112,8 +112,8 @@ class StoreData {
     });
   }
 }
-function initialState(){
-  const { columns, rows, mines } = Settings;
+function initialState(opts){
+  const { columns, rows, mines } = Object.assign({}, Settings, opts);
 
   return (
     Map({ columns, isGameOver: false, isPlayerVictory: false, rows, mines })
@@ -124,7 +124,7 @@ function initialState(){
 function register(state, payload){
   switch (payload.type) {
     case INIT:
-      return initialState();
+      return initialState(payload.value);
     case REVEAL_TILE:
       if (state.get('isGameOver')) { return state; }
       if (state.getIn(['tiles', payload.value, 'isMine'])) {
