@@ -1,4 +1,25 @@
 .game-container {
   display: inline-block;
+
+  #header {
+    background-color: lightgray;
+    .icon-header {
+      text-align: center;
+      .icon-container {
+        cursor: pointer;
+        margin: 0 auto;
+        max-width: 30px;
+        &:hover { background-color: gray; }
+      }
+      i {
+        background-color: yellow;
+        border-radius: 100px;
+      }
+    }
+
+    .counter-header {
+      text-align: right;
+    }
+  }
 }
 
